@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simar Bhai Page</title>
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('your-background-image.png') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+        }
+        /* Loading screen styles */
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        .loading-text {
+            font-size: 36px;
+            font-weight: bold;
+            color: #555;
+        }
+        /* Main content styles */
+        #content {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .show-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, transform 0.5s ease;
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        .show-btn:hover {
+            background-color: #45a049;
+        }
+        .hidden-text {
+            display: none;
+            font-size: 36px;
+            color: white;
+            margin-left: 20px;
+            vertical-align: middle;
+            font-family: 'Roboto', sans-serif; /* Same font as the rest of the page */
+        }
+        .click-for-surprise {
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            transition: background-color 0.3s ease;
+        }
+        .click-for-surprise:hover {
+            background-color: #e67e22;
+        }
+        /* Comment section styles */
+        .comment-section {
+            margin-top: 30px;
+            padding: 20px;
+            border: 1px solid #fff;
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            text-align: left;
+            display: inline-block;
+        }
+        .comment-section input, .comment-section textarea {
+            width: calc(100% - 22px);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #fff;
+            color: #333;
+        }
+        .comment-section button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .comment-section button:hover {
+            background-color: #45a049;
+        }
+        .comments-output {
+            margin-top: 20px;
+        }
+        .comments-output p {
+            border-bottom: 1px solid #ddd;
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading screen -->
+    <div id="loading">
+        <div class="loading-text">Sorry Simar Bhai</div>
+    </div>
+
+    <!-- Click for Surprise Button -->
+    <button class="click-for-surprise" onclick="playAudio()">Click for Surprise</button>
+
+    <!-- Main content -->
+    <div id="content">
+        <h1>
+            Neem ka patta kadwa hai, simar bhai
+            <button class="show-btn" onclick="toggleText()">Reveal Text</button>
+            <span id="hidden-text" class="hidden-text">ko pasand gajar ka halwa hai</span>
+        </h1>
+        <br>
+        <audio id="audio" src="your-audio-file.mp3" preload="auto"></audio>
+
+        <!-- Comment section -->
+        <div class="comment-section">
+            <h2>Leave a Comment</h2>
+            <input type="text" id="name" placeholder="Your Name">
+            <textarea id="comment" rows="4" placeholder="Your Comment"></textarea>
+            <button onclick="submitComment()">Submit</button>
+            <div id="comments-output" class="comments-output"></div>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle hidden text visibility
+        function toggleText() {
+            var hiddenText = document.getElementById('hidden-text');
+            var btn = document.querySelector('.show-btn');
+            if (hiddenText.style.display === 'none' || hiddenText.style.display === '') {
+                hiddenText.style.display = 'inline';
+                btn.innerText = 'Unreveal Text';
+            } else {
+                hiddenText.style.display = 'none';
+                btn.innerText = 'Reveal Text';
+            }
+        }
+
+        // Function to play audio
+        function playAudio() {
+            var audio = document.getElementById('audio');
+            audio.play();
+        }
+
+        // Function to handle comment submission
+        async function submitComment() {
+            var name = document.getElementById('name').value;
+            var comment = document.getElementById('comment').value;
+            if (name && comment) {
+                const response = await fetch('http://localhost:3000/comments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, comment })
+                });
+                if (response.ok) {
+                    displayComments();
+                    document.getElementById('name').value = '';
+                    document.getElementById('comment').value = '';
+                } else {
+                    alert('Failed to submit comment.');
+                }
+            } else {
+                alert('Please fill in both fields.');
+            }
+        }
+
+        // Function to display comments
+        async function displayComments() {
+            const response = await fetch('http://localhost:3000/comments');
+            if (response.ok) {
+                const comments = await response.json();
+                const output = document.getElementById('comments-output');
+                output.innerHTML = '';
+                comments.forEach(comment => {
+                    output.innerHTML += `<p><strong>${comment.name}:</strong> ${comment.comment}</p>`;
+                });
+            } else {
+                alert('Failed to load comments.');
+            }
+        }
+
+        // Hide loading screen and show content
+        window.onload = function() {
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                displayComments();
+            }, 3000); // Adjust the loading time as needed
+        }
+    </script>
+</body>
+</html>

@@ -50,12 +50,9 @@
             font-size: 4vw;
             cursor: pointer;
             border-radius: 5px;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 1001;
+            margin-top: 20px;
+            display: inline-block;
             transition: background-color 0.3s ease;
-            display: none; /* Initially hidden */
         }
         .click-for-surprise:hover {
             background-color: #e67e22;
@@ -65,10 +62,6 @@
             font-weight: 700;
             margin-bottom: 10px;
             color: white;
-            position: relative;
-            display: inline-block;
-            vertical-align: middle;
-            word-wrap: break-word;
         }
         .show-btn {
             background-color: #4CAF50;
@@ -78,13 +71,9 @@
             font-size: 4vw;
             cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s ease, transform 0.5s ease;
-            position: absolute;
-            left: 100%;
-            top: 50%;
-            transform: translateY(-50%);
-            margin-left: 10px;
-            white-space: nowrap;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+            display: inline-block;
         }
         .show-btn:hover {
             background-color: #45a049;
@@ -93,10 +82,7 @@
             display: none;
             font-size: 6vw;
             color: white;
-            margin-left: 20px;
-            vertical-align: middle;
-            font-family: 'Roboto', sans-serif;
-            word-wrap: break-word;
+            margin-top: 20px;
         }
         .audio-btn {
             margin-top: 20px;
@@ -190,19 +176,14 @@
         <div class="loading-text">Sorry Simar Bhai</div>
     </div>
 
-    <!-- Click for Surprise Button -->
-    <button class="click-for-surprise" onclick="playAudio()">Click for Surprise</button>
-
     <!-- Main content -->
     <div id="content">
-        <h1>
-            Neem ka patta kadwa hai, simar bhai
-            <button class="show-btn" onclick="toggleText()">Reveal Text</button>
-            <span id="hidden-text" class="hidden-text">ko pasand gajar ka halwa hai</span>
-        </h1>
+        <h1>Neem ka patta kadwa hai, simar bhai</h1>
+        <button class="show-btn" onclick="toggleText()">Reveal Text</button>
+        <div id="hidden-text" class="hidden-text">ko pasand gajar ka halwa hai</div>
         <br>
         <audio id="audio" src="your-audio-file.mp3" preload="auto"></audio>
-
+        
         <!-- Comment section -->
         <div class="comment-section">
             <h2>Leave a Comment</h2>
@@ -211,6 +192,9 @@
             <button onclick="submitComment()">Submit</button>
             <div id="comments-output" class="comments-output"></div>
         </div>
+        
+        <!-- Click for Surprise Button -->
+        <button class="click-for-surprise" onclick="playAudio()">Click for Surprise</button>
     </div>
 
     <script>
@@ -219,7 +203,7 @@
             var hiddenText = document.getElementById('hidden-text');
             var btn = document.querySelector('.show-btn');
             if (hiddenText.style.display === 'none' || hiddenText.style.display === '') {
-                hiddenText.style.display = 'inline';
+                hiddenText.style.display = 'block';
                 btn.innerText = 'Unreveal Text';
             } else {
                 hiddenText.style.display = 'none';
@@ -277,8 +261,6 @@
             setTimeout(() => {
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('content').style.display = 'block';
-                document.querySelector('.click-for-surprise').style.display = 'inline'; // Show button after loading
-                displayComments();
             }, 3000); // Adjust the loading time as needed
         }
     </script>

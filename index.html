@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simar Bhai Page</title>
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -14,9 +13,8 @@
             background: url('your-background-image.png') no-repeat center center fixed;
             background-size: cover;
             color: white;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden;
         }
-        /* Loading screen styles */
         #loading {
             position: fixed;
             top: 0;
@@ -36,26 +34,10 @@
             color: #555;
             text-align: center;
         }
-        /* Main content styles */
         #content {
             display: none;
             text-align: center;
             padding: 20px;
-        }
-        .click-for-surprise {
-            background-color: #f39c12;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 4vw;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 20px;
-            display: inline-block;
-            transition: background-color 0.3s ease;
-        }
-        .click-for-surprise:hover {
-            background-color: #e67e22;
         }
         h1 {
             font-size: 6vw;
@@ -84,6 +66,21 @@
             color: white;
             margin-top: 20px;
         }
+        .click-for-surprise {
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 4vw;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+        .click-for-surprise:hover {
+            background-color: #e67e22;
+        }
         .audio-btn {
             margin-top: 20px;
             background: url('your-volume-button-image.png') no-repeat center center;
@@ -105,47 +102,59 @@
             margin-left: 10px;
             vertical-align: middle;
         }
-        /* Comment section styles */
-        .comment-section {
-            margin-top: 30px;
-            padding: 20px;
-            border: 1px solid #fff;
-            border-radius: 5px;
-            background-color: rgba(0, 0, 0, 0.5);
-            text-align: left;
-            display: inline-block;
-            width: 90%; /* Adjust width for mobile screens */
-            max-width: 600px; /* Prevent overly wide sections on larger screens */
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
         }
-        .comment-section input, .comment-section textarea {
-            width: calc(100% - 22px);
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #fff;
-            color: #333;
+        .modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            animation-name: animatetop;
+            animation-duration: 0.4s;
         }
-        .comment-section button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
+        @keyframes animatetop {
+            from {top: -300px; opacity: 0}
+            to {top: 0; opacity: 1}
+        }
+        .close {
             color: white;
-            border: none;
-            border-radius: 5px;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            padding: 0 10px;
+            background-color: red;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
             cursor: pointer;
-            font-size: 4vw;
         }
-        .comment-section button:hover {
-            background-color: #45a049;
+        .modal-header {
+            padding: 10px;
+            background-color: #5cb85c;
+            color: white;
         }
-        .comments-output {
-            margin-top: 20px;
-            font-size: 4vw;
+        .modal-body {
+            padding: 20px;
         }
-        .comments-output p {
-            border-bottom: 1px solid #ddd;
-            padding: 5px 0;
-            word-wrap: break-word;
+        .modal-body img {
+            width: 100%;
         }
         /* Responsive design */
         @media (max-width: 600px) {
@@ -163,20 +172,15 @@
             .audio-text {
                 font-size: 5vw;
             }
-            .comment-section {
-                width: 100%;
-            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Loading screen -->
     <div id="loading">
         <div class="loading-text">Sorry Simar Bhai</div>
     </div>
 
-    <!-- Main content -->
     <div id="content">
         <h1>Neem ka patta kadwa hai, simar bhai</h1>
         <button class="show-btn" onclick="toggleText()">Reveal Text</button>
@@ -184,21 +188,27 @@
         <br>
         <audio id="audio" src="your-audio-file.mp3" preload="auto"></audio>
         
-        <!-- Comment section -->
-        <div class="comment-section">
-            <h2>Leave a Comment</h2>
-            <input type="text" id="name" placeholder="Your Name">
-            <textarea id="comment" rows="4" placeholder="Your Comment"></textarea>
-            <button onclick="submitComment()">Submit</button>
-            <div id="comments-output" class="comments-output"></div>
+        <button class="click-for-surprise" onclick="showModal()">Click for Surprise</button>
+
+        <!-- Image below the surprise button -->
+        <img src="your-image.png" alt="Interesting Image" style="width: 80%; max-width: 600px; margin-top: 20px;">
+
+        <!-- Modal for displaying image -->
+        <div id="surpriseModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div class="modal-header">
+                    <h2>Surprise!</h2>
+                </div>
+                <div class="modal-body">
+                    <img src="your-surprise-image.png" alt="Surprise Image">
+                </div>
+            </div>
         </div>
-        
-        <!-- Click for Surprise Button -->
-        <button class="click-for-surprise" onclick="playAudio()">Click for Surprise</button>
     </div>
 
     <script>
-        // Function to toggle hidden text visibility
+        // Toggle hidden text visibility
         function toggleText() {
             var hiddenText = document.getElementById('hidden-text');
             var btn = document.querySelector('.show-btn');
@@ -211,49 +221,21 @@
             }
         }
 
-        // Function to play audio
+        // Show the modal
+        function showModal() {
+            document.getElementById('surpriseModal').style.display = 'block';
+            playAudio();  // Play audio when the modal is shown
+        }
+
+        // Close the modal
+        function closeModal() {
+            document.getElementById('surpriseModal').style.display = 'none';
+        }
+
+        // Play audio
         function playAudio() {
             var audio = document.getElementById('audio');
             audio.play();
-        }
-
-        // Function to handle comment submission
-        async function submitComment() {
-            var name = document.getElementById('name').value;
-            var comment = document.getElementById('comment').value;
-            if (name && comment) {
-                const response = await fetch('http://localhost:3000/comments', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ name, comment })
-                });
-                if (response.ok) {
-                    displayComments();
-                    document.getElementById('name').value = '';
-                    document.getElementById('comment').value = '';
-                } else {
-                    alert('Failed to submit comment.');
-                }
-            } else {
-                alert('Please fill in both fields.');
-            }
-        }
-
-        // Function to display comments
-        async function displayComments() {
-            const response = await fetch('http://localhost:3000/comments');
-            if (response.ok) {
-                const comments = await response.json();
-                const output = document.getElementById('comments-output');
-                output.innerHTML = '';
-                comments.forEach(comment => {
-                    output.innerHTML += `<p><strong>${comment.name}:</strong> ${comment.comment}</p>`;
-                });
-            } else {
-                alert('Failed to load comments.');
-            }
         }
 
         // Hide loading screen and show content
